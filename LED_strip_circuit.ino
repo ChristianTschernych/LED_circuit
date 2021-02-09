@@ -107,7 +107,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
         brightness -= 0.1;
       }
       if(brightness < 0) {
-        brightness = 0;
+        brightness  = 0;
       }
     }
     else if(strcmp(msg,"sparkle")==0){
@@ -182,27 +182,6 @@ void setAll(byte red, byte green, byte blue) {
 }
 
 void turn_off() {
-  int left = NUM_LEDS/2;
-  int right = NUM_LEDS/2+1;
-  int start = 0;
-  int end = NUM_LEDS-1;
-
-  
-  for(int i=0;i<NUM_LEDS/4;i++) {
-    setPixel(left,0,0,0);
-    setPixel(right,0,0,0);
-    setPixel(start,0,0,0);
-    setPixel(end,0,0,0);
-
-    showStrip();
-
-    left-=1;
-    right+=1;
-    start+=1;
-    end-=1;
-   
-  }
-
   //dye 3 led ends orange
   for (int i = 0 ; i<3; i++){
     setPixel(i, 255, 123, 0);
@@ -495,13 +474,14 @@ void rainbowCycle(int SpeedDelay) {
   for(j=0; j<256*5; j++) { // 5 cycles of all colors on wheel
     for(i=0; i< NUM_LEDS; i++) {
       c=Wheel(((i * 256 / NUM_LEDS) + j) & 255);
-      setPixel(i, *c * brightness, *(c+1) * brightness, *(c+2) * brightness);
+      setPixel(i, *c, *(c+1), *(c+2));
     }
     showStrip();
     delay(SpeedDelay);
 
     client.loop();
     if(mode != 4) {break;}
+    Serial.println(brightness);
   }
 }
 
